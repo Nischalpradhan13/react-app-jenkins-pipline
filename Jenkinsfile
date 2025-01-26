@@ -1,10 +1,10 @@
 pipeline {
-     agent any
-     stages {
+    agent any
+    stages {
         stage("Build") {
             steps {
                 sh "npm install"
-                sh "npm run build"
+                sh "NODE_OPTIONS=--openssl-legacy-provider npm run build"
             }
         }
         stage("Deploy") {
