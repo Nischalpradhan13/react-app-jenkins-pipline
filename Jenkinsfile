@@ -9,7 +9,7 @@ pipeline {
         }
         stage("Deploy") {
             steps {
-                sh "rm -rf ."
+                sh "rm -rf /var/www/react-app"
                 sh "cp -r ${WORKSPACE}/build/ ."
             }
         }
