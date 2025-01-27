@@ -7,8 +7,8 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-        <h1> Hello World </h1>
-      <h2> My name is Abdelali Jadelmoula </h2>
+        <h1> Hello there from my World</h1>
+      <h2> Anonymous Person </h2>
 <h3> I am in love with devops (CI/CD) pipeline </h3>
         </p>
         <a
