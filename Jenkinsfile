@@ -1,32 +1,25 @@
 pipeline {
     agent any
 
-    environment {
-        DEPLOY_PATH = "/var/www/react-app" // Define the deployment path as an environment variable
-    }
-
     stages {
         stage("Build") {
             steps {
-                // Install dependencies and build the React application
                 sh "npm install"
                 sh "NODE_OPTIONS=--openssl-legacy-provider npm run build"
             }
         }
-        stage("Deploy") {
+        stage("Serve") {
             steps {
-                // Clean up the existing deployment directory
-                sh "rm -rf ${DEPLOY_PATH}"
-
-                // Copy new build files to the deployment directory
-                sh "cp -r '${WORKSPACE}/build' ${DEPLOY_PATH}"
+                // Serve the app directly from the build directory
+                sh "npm install -g serve"
+                sh "serve -s ${WORKSPACE}/build"
             }
         }
     }
 
     post {
         success {
-            echo "Deployment completed successfully."
+            echo "App is being served from the build directory."
         }
         failure {
             echo "Pipeline failed. Please check the logs for more details."
