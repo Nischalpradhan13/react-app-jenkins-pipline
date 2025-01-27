@@ -8,18 +8,19 @@ pipeline {
                 sh "NODE_OPTIONS=--openssl-legacy-provider npm run build"
             }
         }
-        stage("Serve") {
+        stage("Deploy") {
             steps {
-                // Serve the app directly from the build directory
-                sh "npm install -g serve"
-                sh "serve -s ${WORKSPACE}/build"
+                // Deploy to a subdirectory within the workspace
+                sh "rm -rf ${WORKSPACE}/deploy"
+                sh "mkdir -p ${WORKSPACE}/deploy"
+                sh "cp -r '${WORKSPACE}/build' ${WORKSPACE}/deploy"
             }
         }
     }
 
     post {
         success {
-            echo "App is being served from the build directory."
+            echo "Deployment completed successfully."
         }
         failure {
             echo "Pipeline failed. Please check the logs for more details."
