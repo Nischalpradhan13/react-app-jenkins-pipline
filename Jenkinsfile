@@ -1,11 +1,9 @@
 pipeline {
-    agent { label "Alma" } // Run the entire pipeline on the agent labeled "Alma"
+    agent { label "Alma" }
 
     environment {
-        // Define the Docker image name and tag
         DOCKER_IMAGE = "react-app"
         DOCKER_TAG = "latest"
-        // Define the port to expose the app
         APP_PORT = "3000"
     }
 
@@ -19,14 +17,15 @@ pipeline {
 
         stage("Build Docker Image") {
             steps {
-                // Create a Dockerfile if it doesn't exist
+                // Use a heredoc to write the Dockerfile correctly
                 sh '''
-                echo "FROM nginx:alpine
-                COPY build /usr/share/nginx/html
-                EXPOSE 80
-                CMD [\"nginx\", \"-g\", \"daemon off;\"]" > Dockerfile
+                    cat > Dockerfile <<EOF
+FROM nginx:alpine
+COPY build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+EOF
                 '''
-
                 // Build the Docker image
                 sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
             }
@@ -34,11 +33,8 @@ pipeline {
 
         stage("Run Docker Container") {
             steps {
-                // Stop and remove any existing container with the same name
                 sh "docker stop ${DOCKER_IMAGE} || true"
                 sh "docker rm ${DOCKER_IMAGE} || true"
-
-                // Run the Docker container
                 sh "docker run -d --name ${DOCKER_IMAGE} -p ${APP_PORT}:80 ${DOCKER_IMAGE}:${DOCKER_TAG}"
             }
         }
