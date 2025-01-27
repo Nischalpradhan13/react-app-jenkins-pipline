@@ -16,10 +16,10 @@ pipeline {
         stage("Deploy") {
             steps {
                 // Clean up the existing deployment directory
-                sh "sudo rm -rf ${DEPLOY_PATH}"
+                sh "rm -rf ${DEPLOY_PATH}"
 
                 // Copy new build files to the deployment directory
-                sh "sudo cp -r '${WORKSPACE}/build' ${DEPLOY_PATH}"
+                sh "cp -r '${WORKSPACE}/build' ${DEPLOY_PATH}"
             }
         }
     }
